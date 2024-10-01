@@ -5,7 +5,7 @@ trigger:
       - main
 
 pool:
-  vmImage: 'ubuntu-latest'  # Esto especifica que se usará un agente hospedado por Microsoft en Linux
+  name: 'Default' 
 
 steps:
   - task: UsePythonVersion@0
@@ -17,3 +17,4 @@ steps:
       python --version
       echo "Hello World!"
     displayName: 'Run Python script'
+
