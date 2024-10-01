@@ -1,0 +1,19 @@
+# Este es un ejemplo de pipeline básico
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'  # Esto especifica que se usará un agente hospedado por Microsoft en Linux
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+
+  - script: |
+      python --version
+      echo "Hello World!"
+    displayName: 'Run Python script'
