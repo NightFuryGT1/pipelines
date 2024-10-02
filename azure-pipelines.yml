@@ -1,19 +1,22 @@
-# Este es un ejemplo de pipeline básico
 trigger:
   branches:
     include:
       - main
 
 pool:
-  name: 'Default' 
+  name: 'Default'  # Asegúrate de que este es el agente self-hosted que has configurado
 
 steps:
   - script: echo "Agente self-hosted funcionando correctamente"
     displayName: "Verificar agente self-hosted"
-  
-  # Otros pasos de construcción, prueba o despliegue
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'Docker Hub'
-      repository: 'armando24/prueba'
-      command: 'pull'
+
+
+  # Paso 2: Descargar la imagen Docker manualmente usando script (docker pull)
+  - script: |
+      docker pull armando24/prueba:1.0  # Comando manual para descargar la imagen con tag 1.0 desde Docker Hub
+    displayName: "Descargar imagen Docker con tag 1.0"
+
+  # Paso 3: Ejecutar la imagen Docker en el agente self-hosted
+  - script: |
+      docker run -d -p 80:80 armando24/prueba:1.0  # Cambia el puerto según lo que necesites
+    displayName: "Ejecutar contenedor Docker"
