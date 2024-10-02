@@ -8,13 +8,12 @@ pool:
   name: 'Default' 
 
 steps:
-  - task: UsePythonVersion@0
+  - script: echo "Agente self-hosted funcionando correctamente"
+    displayName: "Verificar agente self-hosted"
+  
+  # Otros pasos de construcción, prueba o despliegue
+  - task: Docker@2
     inputs:
-      versionSpec: '3.x'
-      addToPath: true
-
-  - script: |
-      python --version
-      echo "Hello World!"
-    displayName: 'Run Python script'
-
+      containerRegistry: 'Docker Hub'
+      repository: 'armando24/prueba'
+      command: 'pull'
