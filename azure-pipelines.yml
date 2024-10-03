@@ -19,8 +19,7 @@ steps:
       repository: 'armando24/prueba'  # Reemplaza con tu repositorio
       command: 'build'
       Dockerfile: '**/Dockerfile'  # Ruta del Dockerfile (raíz del proyecto)
-      tags: |
-        latest  # Etiqueta 'latest' o usa $(Build.BuildId) para una versión única
+      tags: 'latest'  # Usa 'latest' o una variable como $(Build.BuildId) para versiones únicas
 
   # Paso 4: Subir la imagen Docker a Docker Hub
   - task: Docker@2
@@ -29,8 +28,7 @@ steps:
       containerRegistry: 'Docker Hub'
       repository: 'armando24/prueba'
       command: 'push'
-      tags: |
-        latest  # Empuja la imagen con la etiqueta 'latest'
+      tags: 'latest'  # Empuja la imagen con la etiqueta 'latest'
 
   # Paso 5: Ejecutar la imagen Docker en el agente self-hosted
   - script: |
