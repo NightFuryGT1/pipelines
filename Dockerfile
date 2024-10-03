@@ -1,11 +1,11 @@
-# Usar una imagen base oficial de Python
-FROM python:3.9-slim
+# Usa una imagen base de Nginx
+FROM nginx:alpine
 
-# Establecer el directorio de trabajo en el contenedor
-WORKDIR /app
+# Copia los archivos HTML y CSS al directorio que Nginx utiliza para servir archivos estáticos
+COPY ./web /usr/share/nginx/html
 
-# Copiar el archivo de script a la imagen
-COPY hello.py .
+# Exponer el puerto 80 para acceder a la aplicación
+EXPOSE 80
 
-# Ejecutar el script al iniciar el contenedor
-CMD ["python", "hello.py"]
+# Iniciar Nginx cuando el contenedor arranque
+CMD ["nginx", "-g", "daemon off;"]
