@@ -1,7 +1,6 @@
 trigger:
   branches:
     include:
-<<<<<<< HEAD
       - main  # Ejecuta el pipeline en cada commit a la rama 'main'
 
 pool:
@@ -26,37 +25,11 @@ steps:
   # Paso 4: Subir la imagen Docker a Docker Hub
   - task: Docker@2
     displayName: "Subir imagen Docker a Docker Hub"
-=======
-      - main  # Se ejecutará en cada commit a la rama 'main'
-
-pool:
-  name: 'Default'  # Asegúrate de que este es el agente self-hosted que has configurado
-
-steps:
-  # Paso 1: Verificar que el agente self-hosted está en funcionamiento
-  - script: echo "Agente self-hosted funcionando correctamente"
-    displayName: "Verificar agente self-hosted"
-
-
-  # Paso 3: Construir la imagen Docker
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'Docker Hub'
-      repository: 'armando24/prueba'  # Repositorio en Docker Hub
-      command: 'build'
-      Dockerfile: '**/Dockerfile'  # Ruta al Dockerfile en tu repositorio (ajusta la ruta si es necesario)
-      tags: |
-        latest  # Etiqueta que se usará para la imagen, puedes agregar más si lo deseas
-
-  # Paso 4: Subir la imagen a Docker Hub
-  - task: Docker@2
->>>>>>> ed2caa9c0ba23df485156769f5c5091ff7ee3009
     inputs:
       containerRegistry: 'Docker Hub'
       repository: 'armando24/prueba'
       command: 'push'
       tags: |
-<<<<<<< HEAD
         latest  # Empuja la imagen con la etiqueta 'latest'
 
   # Paso 5: Ejecutar la imagen Docker en el agente self-hosted
@@ -64,12 +37,4 @@ steps:
       docker pull armando24/prueba:latest  # Descarga la última imagen subida a Docker Hub
       docker stop $(docker ps -q)  # Detiene cualquier contenedor en ejecución
       docker run -d -p 80:80 armando24/prueba:latest  # Ejecuta el contenedor
-=======
-        latest  # Etiqueta que se usará al subir la imagen
-
-  # Paso 5: Ejecutar la nueva imagen en el agente self-hosted (opcional)
-  - script: |
-      docker pull armando24/prueba:latest  # Descargar la nueva imagen con la etiqueta 'latest'
-      docker run -d -p 80:80 armando24/prueba:latest  # Ejecutar la imagen recién construida
->>>>>>> ed2caa9c0ba23df485156769f5c5091ff7ee3009
     displayName: "Ejecutar contenedor Docker"
