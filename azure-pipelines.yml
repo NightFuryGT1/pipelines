@@ -1,19 +1,40 @@
-# Este es un ejemplo de pipeline básico
 trigger:
   branches:
     include:
-      - main
+      - main  # Ejecuta el pipeline en cada commit a la rama 'main'
 
 pool:
-  vmImage: 'ubuntu-latest'  # Esto especifica que se usará un agente hospedado por Microsoft en Linux
+  name: 'Default'  # Usa tu agente self-hosted
 
 steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      addToPath: true
+  # Paso 1: Verificar que el agente self-hosted está funcionando
+  - script: echo "Agente self-hosted funcionando correctamente"
+    displayName: "Verificar agente self-hosted"
 
+  # Paso 3: Construir la imagen Docker
+  - task: Docker@2
+    displayName: "Construir imagen Docker"
+    inputs:
+      containerRegistry: 'Docker Hub'
+      repository: 'armando24/prueba'  # Reemplaza con tu repositorio
+      command: 'build'
+      Dockerfile: '**/Dockerfile'  # Ruta del Dockerfile (raíz del proyecto)
+      tags: |
+        latest  # Etiqueta 'latest' o usa $(Build.BuildId) para una versión única
+
+  # Paso 4: Subir la imagen Docker a Docker Hub
+  - task: Docker@2
+    displayName: "Subir imagen Docker a Docker Hub"
+    inputs:
+      containerRegistry: 'Docker Hub'
+      repository: 'armando24/prueba'
+      command: 'push'
+      tags: |
+        latest  # Empuja la imagen con la etiqueta 'latest'
+
+  # Paso 5: Ejecutar la imagen Docker en el agente self-hosted
   - script: |
-      python --version
-      echo "Hello World!"
-    displayName: 'Run Python script'
+      docker pull armando24/prueba:latest  # Descarga la última imagen subida a Docker Hub
+      docker stop $(docker ps -q)  # Detiene cualquier contenedor en ejecución
+      docker run -d -p 80:80 armando24/prueba:latest  # Ejecuta el contenedor
+    displayName: "Ejecutar contenedor Docker"
